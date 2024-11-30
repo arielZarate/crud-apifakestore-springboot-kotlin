@@ -3,6 +3,7 @@ package com.arielZarate.apiFakeStore.service
 import com.arielZarate.apiFakeStore.Mapper.RatingMapper
 import com.arielZarate.apiFakeStore.dto.ProductDTO
 import com.arielZarate.apiFakeStore.entity.Product
+import com.arielZarate.apiFakeStore.exception.CustomException
 import com.arielZarate.apiFakeStore.repository.ProductRepository
 import org.springframework.stereotype.Service
 
@@ -20,7 +21,12 @@ class ApiService(
 
     //obtener todos los products de la api
     // Obtener todos los productos
-    fun fetchAndReturnProducts(): Mono<List<ProductDTO>> {
+
+
+
+    // Obtener todos los productos de la API o la base de datos
+    fun fetchAndReturnProducts(): List<ProductDTO> {
+        // Buscamos productos en la base de datos
         val existingProducts = productRepository.findAll()
 
         return if (existingProducts.isNotEmpty()) {
@@ -37,43 +43,43 @@ class ApiService(
                 )
             }
             println("******************Datos recuperados con exito *******************")
-            Mono.just(productDTOs) // Envuelve la lista en un Mono
+            productDTOs // Devolvemos la lista directamente (no envuelta en Mono)
         } else {
-            // Si no hay productos, consume la API y guarda los resultados
-          return  webClient.get()
+            // Si no hay productos en la base de datos, consumimos la API
+            val productDTOs = webClient.get()
                 .uri("/products")
                 .retrieve()
                 .bodyToFlux(ProductDTO::class.java) // Convertir la respuesta JSON en objetos ProductDTO
-                .collectList() // Convertir todo en una lista
-                .doOnSuccess { productDTOs ->
-                    val products = productDTOs.map { dto ->
-                        Product(
-                            id = dto.id,
-                            title = dto.title,
-                            price = dto.price,
-                            description = dto.description,
-                            category = dto.category,
-                            image = dto.image,
-                            rating = ratingMapper.toEntity(dto.rating) // Mapear RatingDTO a Rating
-                        )
-                    }
-                    saveProductsToDatabase(products) // Guardar en la base de datos
+                .collectList()
+                .block() // Usamos block() para esperar que la respuesta sea devuelta
+
+            // Si se obtuvieron productos de la API, los guardamos en la base de datos
+            if (productDTOs != null) {
+                val products = productDTOs.map { dto ->
+                    Product(
+                        id = dto.id,
+                        title = dto.title,
+                        price = dto.price,
+                        description = dto.description,
+                        category = dto.category,
+                        image = dto.image,
+                        rating = ratingMapper.toEntity(dto.rating)
+                    )
                 }
-                .doOnError { error ->
-                    println("Error in consuming API: ${error.message}")
-                }
+                saveProductsToDatabase(products) // Guardamos en la base de datos
+            }
+
+            productDTOs ?: emptyList() // Devuelve una lista vacía si no se obtienen productos
         }
     }
-
-
-
     // Método privado para guardar productos en la base de datos
     private fun saveProductsToDatabase(products: List<Product>) {
         try {
-          var products=  productRepository.saveAll(products)
+           productRepository.saveAll(products)
             println("*** Products saved successfully *** ")
         } catch (ex: Exception) {
             println("Error saving products to the database: ${ex.message}")
+            throw  CustomException("Error saving products to the database: ${ex.message}")
         }
     }
 

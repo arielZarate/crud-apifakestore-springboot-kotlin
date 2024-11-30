@@ -1,11 +1,17 @@
 package com.arielZarate.apiFakeStore.service
 
 import com.arielZarate.apiFakeStore.dto.ProductDTO
+import com.arielZarate.apiFakeStore.exception.CustomException
+import com.arielZarate.apiFakeStore.repository.ProductRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 
 @Service
-class ProductServiceImpl :ProductService {
+class ProductServiceImpl(
+    private val productRepository: ProductRepository,
+    private val serviceApi:ApiService
+) :ProductService {
 
 
 
@@ -36,13 +42,17 @@ class ProductServiceImpl :ProductService {
     * */
 
 
-
     override fun createProduct(product: ProductDTO): ProductDTO {
-        TODO("Not yet implemented")
+        TODO("Not yet imp")
     }
 
     override fun getProducts(): List<ProductDTO> {
-        TODO("Not yet implemented")
+    try {
+        return serviceApi.fetchAndReturnProducts()
+    }catch ( ex:Exception){
+        throw CustomException("Error el devolver datos de la api ${ex.message}" )
+    }
+
     }
 
     override fun getProductById(id: Long): ProductDTO {

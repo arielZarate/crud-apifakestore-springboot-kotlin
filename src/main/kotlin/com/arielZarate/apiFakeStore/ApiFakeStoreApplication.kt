@@ -11,7 +11,7 @@ class ApiFakeStoreApplication {
 
 	@Bean
 	fun runServiceApi(apiService: ApiService) = CommandLineRunner {
-		apiService.fetchProducts().subscribe()
+		apiService.fetchAndReturnProducts();
 	}
 }
 fun main(args: Array<String>) {

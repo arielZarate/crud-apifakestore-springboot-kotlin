@@ -6,7 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="c7359ad3-6fa8-4740-8bea-70a33b94f212" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/arielZarate/apiFakeStore/config/GlobalExceptionHandler.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/arielZarate/apiFakeStore/config/GlobalExceptionHandler.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/arielZarate/apiFakeStore/ApiFakeStoreApplication.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/arielZarate/apiFakeStore/ApiFakeStoreApplication.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/arielZarate/apiFakeStore/controller/ProductController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/arielZarate/apiFakeStore/controller/ProductController.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/arielZarate/apiFakeStore/service/ApiService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/arielZarate/apiFakeStore/service/ApiService.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/arielZarate/apiFakeStore/service/ProductServiceImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/arielZarate/apiFakeStore/service/ProductServiceImpl.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
