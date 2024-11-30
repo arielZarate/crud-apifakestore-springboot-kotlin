@@ -1,6 +1,8 @@
 package com.arielZarate.apiFakeStore.service
 
+import com.arielZarate.apiFakeStore.Mapper.ProductMapper
 import com.arielZarate.apiFakeStore.dto.ProductDTO
+import com.arielZarate.apiFakeStore.entity.Product
 import com.arielZarate.apiFakeStore.exception.CustomException
 import com.arielZarate.apiFakeStore.repository.ProductRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,7 +12,8 @@ import org.springframework.stereotype.Service
 @Service
 class ProductServiceImpl(
     private val productRepository: ProductRepository,
-    private val serviceApi:ApiService
+    private val serviceApi:ApiService,
+    private val productMapper: ProductMapper
 ) :ProductService {
 
 
@@ -47,16 +50,20 @@ class ProductServiceImpl(
     }
 
     override fun getProducts(): List<ProductDTO> {
-    try {
-        return serviceApi.fetchAndReturnProducts()
-    }catch ( ex:Exception){
-        throw CustomException("Error el devolver datos de la api ${ex.message}" )
-    }
+        try {
+            return serviceApi.fetchAndReturnProducts()
+        } catch (ex: Exception) {
+            throw CustomException("Error in Api:  ${ex.message}")
+        }
 
     }
 
     override fun getProductById(id: Long): ProductDTO {
-        TODO("Not yet implemented")
+      val product=productRepository.findById(id).orElseThrow{
+          CustomException("product by Id:${id} not found ")
+      }
+
+        return productMapper.fromEntity(product);
     }
 
     override fun updateProduct(product: ProductDTO, id: Long): ProductDTO {
@@ -64,6 +71,12 @@ class ProductServiceImpl(
     }
 
     override fun deleteProduct(id: Long) {
-        TODO("Not yet implemented")
+
+       if(!productRepository.existsById(id))
+       {
+           throw CustomException("Product not found by id $id")
+       }
+
+        return productRepository.deleteById(id);
     }
 }
