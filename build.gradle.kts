@@ -25,7 +25,10 @@ dependencies {
 	//jpa y mysql
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     runtimeOnly("com.mysql:mysql-connector-j")
-	//===========
+	//==========web flux=====
+	implementation("org.springframework.boot:spring-boot-starter-webflux") // Agrega esta dependencia
+
+	//===============
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

@@ -3,7 +3,6 @@ package com.arielZarate.apiFakeStore.entity
 import jakarta.persistence.Embeddable
 
 
-
 /*
 
 @Embeddable: La anotación en la clase Rating indica
@@ -14,7 +13,10 @@ import jakarta.persistence.Embeddable
 
 @Embeddable
 class Rating(
-    val rate:Double,
-    val count:Int
+    val rate:Double=0.0,
+    val count:Int=0
 ) {
+
+    // Constructor sin parámetros (requiere ser explícito en Kotlin, porque data class genera constructores)
+    constructor() : this(0.0, 0)
 }
